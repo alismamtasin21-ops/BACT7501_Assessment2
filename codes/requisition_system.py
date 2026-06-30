@@ -1,6 +1,6 @@
 class requisitionsystem:
     def __init__(self):
-        self.requisition_s = []
+        self.requisition = []
         self.counter = 10000
     
     def addrequisition(self):
@@ -8,7 +8,7 @@ class requisitionsystem:
         date = input("Date : ")
         stuff_id = input(" Stuff Id  : ")
         stuff_name = input("Stuff Name : ") 
-        self,counter += 1 
+        self.counter += 1 
         requisition_id = self.counter 
 
 
@@ -24,7 +24,7 @@ class requisitionsystem:
                 "item_name": item_name,
                 "item_price": item_price
             }
-            item.append(item)
+            items.append(item)
             total += item_price
             more = input("Add Another Item (yes/no): ")
             if more.lower() == "no":
@@ -40,13 +40,13 @@ class requisitionsystem:
             "status": status,
             "approval_ref": approval_ref
         }
-        self.requisitions.append(requisition)
+        self.requisition.append(requisition)
         print("\nRequisition add sucess")
         print("Requisition ID:", requisition_id)
         print("Total($): ", total)
         print("Status:", status)
         print("Approval Reference Number:", approval_ref)
-    def approveRequisition(self, total, stuff_id, requisition_id):
+    def approverequisition(self, total, stuff_id, requisition_id):
         status = "Pending"
         approval_ref = "Not available"
         if total < 500:
@@ -69,8 +69,8 @@ class requisitionsystem:
                 choice = input("Enter requisition number to respond: ")
                 if choice.isdigit():
                     req_number = int(choice)
-                    if req_number >= 1 and req_number <= len(self.requisitions):
-                        selected_requisition = self.requisitions[req_number - 1]
+                    if req_number >= 1 and req_number <= len(self.requisition):
+                        selected_requisition = self.requisition[req_number - 1]
                         if selected_requisition["status"] == "Pending":
                             print("1. Approved")
                             print("2. Not approved")
@@ -94,6 +94,63 @@ class requisitionsystem:
                         print("Invalid requisition number")
                 else:
                     print("Invalid input. Please enter right number.")
+    def displayRequisitions(self):
+        if len(self.requisition) == 0:
+            print("No requisitions found.")
+        else:
+            print("\n========== PRINTING REQUISITIONS ==========")
+            for requisition in self.requisition:
+                print("Date:", requisition["date"])
+                print("Requisition ID:", requisition["requisition_id"])
+                print("Staff ID:", requisition["staff_id"])
+                print("Staff Name:", requisition["staff_name"])
+                print("Total: $", requisition["total"])
+                print("Status:", requisition["status"])
+                print("Approval Reference Number:", requisition["approval_ref"])
+                print("=====================================")
+    def requisitionStatistics(self):
+        total_submitted = len(self.requisition)
+        total_approved = 0
+        total_pending = 0
+        total_not_approved = 0
+        for requisition in self.requisition:
+            if requisition["status"] == "Approved":
+                total_approved += 1
+            elif requisition["status"] == "Pending":
+                total_pending += 1
+            elif requisition["status"] == "Not approved":
+                total_not_approved += 1            
+        print("\n========== REQUISITION STATISTICS ==========")
+        print("The total number of requisitions submitted:", total_submitted)
+        print("The total number of approved requisitions:", total_approved)
+        print("The total number of pending requisitions:", total_pending)
+        print("The total number of not approved requisitions:", total_not_approved)
+    def displayMenu(self):
+        print("\n========== REQUISITION SYSTEM MENU ==========")
+        print("1. Add Requisition")
+        print("2. Respond to Pending Requisition")
+        print("3. Display Requisitions")
+        print("4. Display Statistics")
+        print("0. Exit")
+    def run(self):
+        while True:
+            self.displayMenu()
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                self.addrequisition()
+            elif choice == "2":
+                self.respondRequisition()
+            elif choice == "3":
+                self.displayRequisitions()
+            elif choice == "4":
+                self.requisitionStatistics()
+            elif choice == "0":
+                print("Thank you for using the Requisition System.")
+                break
+            else:
+                print("Invalid choice. Please choose from 0 to 5.")
 
 
+system = requisitionsystem()
+system.run()    
 
